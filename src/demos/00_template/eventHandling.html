@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>React - Component</title>
+    <link rel = "stylesheet" href = "../../css/main.css">
+    <script src="../../js/react.min.js"></script>
+    <script src="../../js/react-dom.min.js"></script>
+    <script src="../../js/browser.min.js"></script>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+
+    <div id="container"></div>
+
+    <script type="text/babel">
+        var Comment = React.createClass({
+
+            rem: function(){
+                alert('You just Deleted');
+            },
+            adding: function () {
+                alert('You just Add');
+            },
+            render: function() {
+                return (
+                   
+                        <div className = "commentContainer">
+                    <div className="commentText">{this.props.children}</div>
+                    <button className="button-primary" onClick = {this.adding} >Add</button>
+                    <button className="button-danger" onClick= {this.rem}>Delete</button>
+                </div>);
+            }
+        });
+
+        ReactDOM.render(<div className = "board">
+            <Comment> Create Inteface </Comment>
+            <Comment> Buy Shoes </Comment>
+        </div>, document.getElementById('container'));
+    </script>
+
+</body>
+</html>

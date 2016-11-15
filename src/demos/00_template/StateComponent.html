@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>React - Component</title>
+    <link rel = "stylesheet" href = "../../css/main.css">
+    <script src="../../js/react.min.js"></script>
+    <script src="../../js/react-dom.min.js"></script>
+    <script src="../../js/browser.min.js"></script>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+
+<div id="container"></div>
+
+<script type="text/babel">
+    var Comment = React.createClass({
+        getInitialState : function () {
+            return {Editmode:false}
+        },
+        rem: function(){
+            console.log("removing comments");
+            this.props.DelCom(this.props.index);
+        },
+        adding: function () {
+
+            this.setState({Editmode : true});
+
+        },
+        Save: function () {
+            var val = this.refs.textarea.value;
+            console.log(val);
+            this.setState({Editmode : false});
+            this.props.UpdateCom(val, this.props.index);
+        },
+        renderNormal: function(){
+            return (<div className = "commentContainer">
+                <div className="commentText"><h1>{this.props.children}</h1></div>
+                <button className="button-primary" onClick = {this.adding} >Edit</button>
+                <button className="button-danger" onClick= {this.rem}>Delete</button>
+            </div>);
+        },
+        renderEdit: function () {
+            return (<div className = "commentContainer">
+                <textarea ref = "textarea" className="commentText" defaultValue={this.props.children}></textarea>
+                <button className="button-success" onClick = {this.Save} >Save</button>
+
+            </div>);
+        },
+        render: function() {
+            if(this.state.Editmode){
+               return this.renderEdit();
+            }
+            else{
+                return this.renderNormal();
+            }
+        }
+    });
+
+    var Board = React.createClass({
+       getInitialState: function(){
+           return{
+               comments:[
+
+               ]
+           }
+       },
+        removeComment : function(i){
+            console.log("removing comment " +i );
+            var arr = this.state.comments;
+            arr.splice(i,1);
+            this.setState({comments : arr});
+        },
+        EditComment : function (newText, i) {
+            console.log('Updating Comment');
+            var arr = this.state.comments;
+            arr[i] = newText;
+            this.setState({comments:arr});
+        },
+        addComment: function (text){
+            var arr = this.state.comments;
+            arr.push(text);
+            this.setState({comments:arr});
+        },
+        eachComment: function (text , i) {
+          return (
+
+                  <Comment key = {i} index = {i} DelCom = {this.removeComment} UpdateCom = {this.EditComment}>
+                      {text}
+                  </Comment>
+          );
+
+        },
+       render: function () {
+          return ( <div className = "board">
+              <button className = "button-info create" onClick = {this.addComment.bind(null,'Hello, My Name is Pewdiepie')}>Add Note</button>
+              {this.state.comments.map(this.eachComment)}
+           </div>);
+       }
+    });
+    ReactDOM.render(<Board/>, document.getElementById('container'));
+</script>
+
+</body>
+</html>
